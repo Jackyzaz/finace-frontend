@@ -1,23 +1,16 @@
 import { useState } from "react";
 import { Button, Form, Input, Alert } from "antd";
-import axios from "axios";
+import { useAuth } from "../context/useAuth";
 
-axios.defaults.baseURL =
-  process.env.REACT_APP_BASE_URL || "http://localhost:1337";
-const URL_AUTH = "/api/auth/local";
-
-export default function LoginPage(props) {
+export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errMsg, setErrMsg] = useState(null);
+  const { login } = useAuth();
   const handleLogin = async (formData) => {
     try {
       setIsLoading(true);
       setErrMsg(null);
-      const response = await axios.postForm(URL_AUTH, formData);
-      const token = response.data.jwt;
-      axios.defaults.headers.common = { Authorization: `bearer ${token}` };
-
-      props.onLoginSuccess();
+      login(formData);
     } catch (err) {
       console.log(err);
       setErrMsg(err.message);
@@ -25,10 +18,9 @@ export default function LoginPage(props) {
       setIsLoading(false);
     }
   };
-  return (
+  return !isLoading && (
     <div className="container">
       <h1>Login</h1>
-      {!isLoading && (
         <Form onFinish={handleLogin} autoComplete="off">
           {errMsg && (
             <Form.Item>
@@ -55,7 +47,7 @@ export default function LoginPage(props) {
             </Button>
           </Form.Item>
         </Form>
-      )}
+      
     </div>
   );
 }
