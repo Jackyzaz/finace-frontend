@@ -4,8 +4,14 @@ import { useAuth } from "./useAuth";
 export const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
   if (!user) {
-    // user is not authenticated
-    return <Navigate to="/login" />;
+    return (
+      <>
+        <div className="container">
+          <h1>Pleas Login First!</h1>
+          <a href="/login">Go to Login</a>
+        </div>
+      </>
+    );
   }
   return children;
 };

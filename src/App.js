@@ -4,6 +4,7 @@ import HomePage from "./pages/Home";
 import LoginPage from "./pages/Login";
 import ProfilePage from "./pages/Profile";
 import { AuthProvider } from "./context/useAuth";
+import { ProtectedRoute } from "./context/ProtectedRoute";
 
 function App() {
   return (
@@ -11,7 +12,14 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </AuthProvider>
   );
