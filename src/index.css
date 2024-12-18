@@ -21,3 +21,12 @@ code {
   justify-content: center;
   font-size: calc(10px + 2vmin);
 }
+
+header {
+  position:fixed;
+  width:100%;
+  left:0;
+  top:0;
+  right: 0;
+  z-index: 1000;
+}

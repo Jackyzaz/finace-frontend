@@ -8,11 +8,20 @@ import { ProtectedRoute } from "./context/ProtectedRoute";
 import { Layout } from "antd";
 import HeaderNavbar from "./components/HeaderNavbar";
 import DashboardPage from "./pages/Dashboard";
+import { Header } from "antd/es/layout/layout";
 
 function App() {
   return (
     <Layout>
-      <HeaderNavbar />
+      <Header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          width: "100%"
+        }}
+      >
+        <HeaderNavbar />
+      </Header>
       <Content />
     </Layout>
   );

@@ -8,12 +8,6 @@ export default function HeaderNavbar() {
   const navigate = useNavigate();
 
   return (
-    <Header
-      style={{
-        display: "flex",
-        alignItems: "center",
-      }}
-    >
       <Menu
         theme="dark"
         mode="horizontal"
@@ -26,6 +20,5 @@ export default function HeaderNavbar() {
           navigate((key), { replace: true });
         }}
       />
-    </Header>
   );
 }

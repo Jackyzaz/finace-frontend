@@ -19,7 +19,6 @@ export default function LoginPage() {
     }
   };
   return (
-    <>
       <Spin spinning={isLoading}>
         <div className="container">
           <h1>Login</h1>
@@ -51,7 +50,5 @@ export default function LoginPage() {
           </Form>
         </div>
       </Spin>
-      ;
-    </>
   );
 }
