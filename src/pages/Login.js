@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Form, Input, Alert } from "antd";
+import { Button, Form, Input, Alert, Spin } from "antd";
 import { useAuth } from "../context/useAuth";
 
 export default function LoginPage() {
@@ -18,36 +18,40 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   };
-  return !isLoading && (
-    <div className="container">
-      <h1>Login</h1>
-        <Form onFinish={handleLogin} autoComplete="off">
-          {errMsg && (
-            <Form.Item>
-              <Alert message={errMsg} type="error" />
+  return (
+    <>
+      <Spin spinning={isLoading}>
+        <div className="container">
+          <h1>Login</h1>
+          <Form onFinish={handleLogin} autoComplete="off">
+            {errMsg && (
+              <Form.Item>
+                <Alert message={errMsg} type="error" />
+              </Form.Item>
+            )}
+            <Form.Item
+              label="Username"
+              name="identifier"
+              rules={[{ required: true }]}
+            >
+              <Input />
             </Form.Item>
-          )}
-          <Form.Item
-            label="Username"
-            name="identifier"
-            rules={[{ required: true }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true }]}
-          >
-            <Input.Password />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" loading={isLoading}>
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      
-    </div>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[{ required: true }]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" loading={isLoading}>
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      </Spin>
+      ;
+    </>
   );
 }

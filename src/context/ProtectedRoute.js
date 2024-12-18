@@ -1,4 +1,3 @@
-import { Navigate } from "react-router";
 import { useAuth } from "./useAuth";
 
 export const ProtectedRoute = ({ children }) => {
@@ -7,7 +6,7 @@ export const ProtectedRoute = ({ children }) => {
     return (
       <>
         <div className="container">
-          <h1>Pleas Login First!</h1>
+          <h1>You Must Login First!</h1>
           <a href="/login">Go to Login</a>
         </div>
       </>

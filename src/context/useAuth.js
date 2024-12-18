@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
       const { jwt, user: userData } = response.data;
       axios.defaults.headers.common = { Authorization: `bearer ${jwt}` };
       setUser({ ...userData, jwt });
-      navigate("/profile", { replace: true });
+      navigate("/dashboard", { replace: true });
     } catch (error) {
       console.error("Login failed:", error.message || "An error occurred");
       alert("Login failed. Please check your credentials.");
