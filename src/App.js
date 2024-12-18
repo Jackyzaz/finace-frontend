@@ -13,15 +13,6 @@ import { Header } from "antd/es/layout/layout";
 function App() {
   return (
     <Layout>
-      <Header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          width: "100%"
-        }}
-      >
-        <HeaderNavbar />
-      </Header>
       <Content />
     </Layout>
   );
@@ -30,6 +21,15 @@ function App() {
 function Content() {
   return (
     <AuthProvider>
+      <Header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        <HeaderNavbar />
+      </Header>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
