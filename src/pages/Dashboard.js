@@ -14,7 +14,8 @@ export default function DashboardPage() {
   const [transactionData, setTransactionData] = useState([]);
   const [amount, setAmount] = useState(0);
 
-  const URL_TXACTIONS = `/api/txactions?filters[creator][id][$eq]=${user.id}`;
+  const URL_TXACTIONS = `/api/txactions`;
+  const URL_TXACTIONS_FILTER = `/api/txactions?filters[creator][id][$eq]=${user.id}`;
 
   const handleLogout = () => {
     try {
@@ -30,7 +31,7 @@ export default function DashboardPage() {
   const fetchItems = useCallback(async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(URL_TXACTIONS);
+      const response = await axios.get(URL_TXACTIONS_FILTER);
       setTransactionData(
         response.data.data.map((row) => ({
           id: row.id,
