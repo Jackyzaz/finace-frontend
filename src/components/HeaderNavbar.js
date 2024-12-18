@@ -1,7 +1,7 @@
-import { Button, Col, Menu, Row } from "antd";
+import { Button, Col, Menu, Row, Space } from "antd";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/useAuth";
-import { HomeOutlined, DashboardOutlined } from "@ant-design/icons";
+import { HomeOutlined, DashboardOutlined, SignalFilled } from "@ant-design/icons";
 export default function HeaderNavbar() {
   const items = [
     { key: `/`, label: `Home`, icon: <HomeOutlined /> },
@@ -18,6 +18,12 @@ export default function HeaderNavbar() {
   };
   return (
     <Row justify="space-between" style={{ width: "100%" }}>
+      <Col>
+        <Space size="middle">
+          <SignalFilled style={{ color: "white", fontSize: "2.5vh" }} />
+          <p style={{ fontSize: "3vh", fontWeight: "bold", color: "white" }}>My Finace App</p>
+        </Space>
+      </Col>
       <Col>
         <Menu
           theme="dark"
