@@ -1,23 +1,43 @@
-import { BugOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Button, Modal, Popconfirm, Space, Table, Tag } from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Button, Popconfirm, Space, Table, Tag } from "antd";
+import { useState } from "react";
 import dayjs from "dayjs";
+import EditTransactionModal from "./EditTransactionModal";
 
 export default function TransactionList(props) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingRecord, setEditingRecord] = useState(null);
+
+  const showEditModal = (record) => {
+    setEditingRecord(record);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setEditingRecord(null);
+  };
+
+  const handleModalSave = (updatedValues) => {
+    const updatedRecord = { ...editingRecord, ...updatedValues };
+    props.onRowUpdate(updatedRecord); // Call the provided update handler
+    setIsModalOpen(false);
+    setEditingRecord(null);
+  };
+
   const columns = [
     {
       title: "DateTime",
       dataIndex: "action_datetime",
       key: "action_datetime",
-      render: (_, record) => dayjs(record.action_datetime).format("DD/MM/YYYY - HH:mm")
+      render: (_, record) => dayjs(record.action_datetime).format("DD/MM/YYYY - HH:mm"),
     },
     {
       title: "Type",
       dataIndex: "type",
       key: "type",
       render: (type) => (
-        <Tag color={type === "income" ? "green" : "red"}>
-          {type === "income" ? "รายรับ" : "รายจ่าย"}
-        </Tag>
+        <Tag color={type === "income" ? "green" : "red"}>{type === "income" ? "รายรับ" : "รายจ่าย"}</Tag>
       ),
     },
     {
@@ -31,37 +51,34 @@ export default function TransactionList(props) {
       key: "note",
     },
     {
-      title: "Action", key: "action", render: (_, record) => (
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
         <Space size="middle">
-          
-          <Popconfirm
-            title="Delete the transaction"
-            description="Are you sure to delete this transaction?"
-            onConfirm={() => props.onRowDelete(record.id)}
-          >
-            <Button danger 
-              type="primary" 
-              shape="circle" 
-              icon={<DeleteOutlined />} />
-          </Popconfirm>
-          <Button 
-            type="primary" 
-            shape="circle" 
-            icon={<BugOutlined/>} 
-            onClick={() => {
-              Modal.info({
-                title: "Debug",
-                content: JSON.stringify(record)
-              })
-            }}/>
+          <Button
+            onClick={() => props.onRowDelete(record.id)}
+            danger
+            type="primary"
+            shape="circle"
+            icon={<DeleteOutlined />}
+          />
+
+          <Button type="primary" shape="circle" icon={<EditOutlined />} onClick={() => showEditModal(record)} />
         </Space>
-      ), 
+      ),
     },
   ];
 
   return (
     <>
       <Table dataSource={props.data} columns={columns} />
+
+      <EditTransactionModal
+        isVisible={isModalOpen}
+        onClose={handleModalClose}
+        onSave={handleModalSave}
+        initialValues={editingRecord}
+      />
     </>
   );
 }
