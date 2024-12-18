@@ -19,36 +19,28 @@ export default function LoginPage() {
     }
   };
   return (
-      <Spin spinning={isLoading}>
-        <div className="container">
-          <h1>Login</h1>
-          <Form onFinish={handleLogin} autoComplete="off">
-            {errMsg && (
-              <Form.Item>
-                <Alert message={errMsg} type="error" />
-              </Form.Item>
-            )}
-            <Form.Item
-              label="Username"
-              name="identifier"
-              rules={[{ required: true }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[{ required: true }]}
-            >
-              <Input.Password />
-            </Form.Item>
+    <Spin spinning={isLoading}>
+      <div className="container">
+        <h1>Login</h1>
+        <Form onFinish={handleLogin} autoComplete="off">
+          {errMsg && (
             <Form.Item>
-              <Button type="primary" htmlType="submit" loading={isLoading}>
-                Submit
-              </Button>
+              <Alert message={errMsg} type="error" />
             </Form.Item>
-          </Form>
-        </div>
-      </Spin>
+          )}
+          <Form.Item label="Username" name="identifier" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="Password" name="password" rules={[{ required: true }]}>
+            <Input.Password />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" loading={isLoading}>
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </Spin>
   );
 }

@@ -1,16 +1,26 @@
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { useLocalStorage } from "./useLocalStorage";
 import axios from "axios";
 const AuthContext = createContext();
 
-axios.defaults.baseURL =
-  process.env.REACT_APP_BASE_URL || "http://localhost:1337";
+axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:1337";
 const URL_AUTH = "/api/auth/local";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage("user", null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      if (parsedUser && parsedUser.jwt) {
+        axios.defaults.headers.common["Authorization"] = `bearer ${parsedUser.jwt}`;
+        setUser(parsedUser);
+      }
+    }
+  }, []);
 
   const login = async (formData) => {
     try {
@@ -40,9 +50,7 @@ export const AuthProvider = ({ children }) => {
     [user]
   );
 
-  return (
-    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
@@ -53,5 +61,3 @@ export const useAuth = () => {
   }
   return context;
 };
-
-
