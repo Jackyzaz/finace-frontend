@@ -1,18 +1,21 @@
 import { useAuth } from "../context/useAuth";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import "../App.css";
 import TransactionList from "../components/TransactionList";
 import AddItem from "../components/AddItem";
 import axios from "axios";
 import { Button, Divider, Spin, Typography } from "antd";
 
-// axios.defaults.baseURL =
-//   process.env.REACT_APP_BASE_URL || "http://localhost:1337";
-const URL_TXACTIONS = "/api/txactions";
+axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:1337";
 
 export default function DashboardPage() {
   const { logout, user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [transactionData, setTransactionData] = useState([]);
+  const [amount, setAmount] = useState(0);
+
+  const URL_TXACTIONS = `/api/txactions?filters[creator][id][$eq]=${user.id}`;
+
   const handleLogout = () => {
     try {
       setIsLoading(true);
@@ -23,7 +26,8 @@ export default function DashboardPage() {
       setIsLoading(false);
     }
   };
-  const fetchItems = async () => {
+
+  const fetchItems = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await axios.get(URL_TXACTIONS);
@@ -39,7 +43,7 @@ export default function DashboardPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [URL_TXACTIONS]);
 
   const handleNoteChanged = (id, note) => {
     setTransactionData(
@@ -70,7 +74,7 @@ export default function DashboardPage() {
         type: item.type,
         note: item.note,
         amount: item.amount,
-        creator: user.username,
+        creator: user.id,
       };
       const response = await axios.post(URL_TXACTIONS, { data: params });
       const { id, attributes } = response.data.data;
@@ -88,15 +92,13 @@ export default function DashboardPage() {
       setIsLoading(false);
     }
   };
-  const [transactionData, setTransactionData] = useState([]);
-  const [amount, setAmount] = useState(0);
 
   useEffect(() => {
     if (user && user.jwt) {
       axios.defaults.headers.common["Authorization"] = `bearer ${user.jwt}`;
       fetchItems();
     }
-  }, [user]);
+  }, [user, fetchItems]); // Add 'fetchItems' as a dependency
 
   useEffect(() => {
     setAmount(
@@ -107,6 +109,7 @@ export default function DashboardPage() {
       )
     );
   }, [transactionData]);
+
   return (
     <>
       <div className="container">
