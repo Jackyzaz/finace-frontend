@@ -114,10 +114,7 @@ export default function DashboardPage() {
   return (
     <>
       <div className="container">
-        <h1>This is Dashboard</h1>
-        <Button type="primary" onClick={handleLogout}>
-          Logout
-        </Button>
+        <h1>Dashboard: {user.username}</h1>
         <Typography.Title>จํานวนเงินปัจจุบัน {amount} บาท</Typography.Title>
         <AddItem onItemAdded={addItem} />
         <Divider>บันทึก รายรับ - รายจ่าย</Divider>

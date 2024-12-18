@@ -15,12 +15,15 @@ code {
 .container {
   text-align: center;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  /* display: flex;  
+  flex-direction: column; */
+  padding-left: 10vh;
+  padding-right: 10vh;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   width: 100%;
+  margin-top: 10vh;
 }
 
 header {

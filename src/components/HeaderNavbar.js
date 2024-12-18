@@ -1,14 +1,14 @@
-import { Button, Col, Menu, Row, Space } from "antd";
+import { Button, Col, Menu, Row } from "antd";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/useAuth";
-
+import { HomeOutlined, DashboardOutlined } from "@ant-design/icons";
 export default function HeaderNavbar() {
   const items = [
-    { key: `/`, label: `Home` },
-    { key: `/Dashboard`, label: `Dashboard` },
+    { key: `/`, label: `Home`, icon: <HomeOutlined /> },
+    { key: `/Dashboard`, label: `Dashboard`, icon: <DashboardOutlined /> },
   ];
   const navigate = useNavigate();
-  const { login, logout, user } = useAuth();
+  const { logout, user } = useAuth();
 
   const handleLogout = () => {
     logout();
