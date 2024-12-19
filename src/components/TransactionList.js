@@ -71,7 +71,10 @@ export default function TransactionList(props) {
 
   return (
     <>
-      <Table dataSource={props.data} columns={columns} />
+      <Table
+        dataSource={[...props.data].sort((a, b) => new Date(b.action_datetime) - new Date(a.action_datetime))}
+        columns={columns}
+      />
 
       <EditTransactionModal
         isVisible={isModalOpen}

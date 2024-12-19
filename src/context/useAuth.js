@@ -1,45 +1,45 @@
-import { createContext, useContext, useEffect, useMemo } from "react";
+// useAuth.js
+import { createContext, useCallback, useContext, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router";
-import { useLocalStorage } from "./useLocalStorage";
+import { useCookie } from "./useCookie";
 import axios from "axios";
+
 const AuthContext = createContext();
 
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:1337";
 const URL_AUTH = "/api/auth/local";
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useLocalStorage("user", null);
+  const [user, setUser, removeUser] = useCookie("user", null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      if (parsedUser && parsedUser.jwt) {
-        axios.defaults.headers.common["Authorization"] = `bearer ${parsedUser.jwt}`;
-        setUser(parsedUser);
+    if (user && user.jwt) {
+      axios.defaults.headers.common["Authorization"] = `bearer ${user.jwt}`;
+    }
+  }, [user]);
+
+  const login = useCallback(
+    async (formData) => {
+      try {
+        const response = await axios.post(URL_AUTH, formData);
+        const { jwt, user: userData } = response.data;
+        axios.defaults.headers.common = { Authorization: `bearer ${jwt}` };
+        setUser({ ...userData, jwt });
+        navigate("/dashboard", { replace: true });
+      } catch (error) {
+        console.error("Login failed:", error.message || "An error occurred");
+        alert("Login failed. Please check your credentials.");
       }
-    }
-  }, []);
+    },
+    [navigate, setUser]
+  );
 
-  const login = async (formData) => {
-    try {
-      const response = await axios.post(URL_AUTH, formData);
-      const { jwt, user: userData } = response.data;
-      axios.defaults.headers.common = { Authorization: `bearer ${jwt}` };
-      setUser({ ...userData, jwt });
-      navigate("/dashboard", { replace: true });
-    } catch (error) {
-      console.error("Login failed:", error.message || "An error occurred");
-      alert("Login failed. Please check your credentials.");
-    }
-  };
-
-  const logout = () => {
-    setUser(null);
+  const logout = useCallback(() => {
+    removeUser();
     delete axios.defaults.headers.common["Authorization"];
     navigate("/", { replace: true });
-  };
+  }, [navigate, removeUser]);
 
   const contextValue = useMemo(
     () => ({
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
       login,
       logout,
     }),
-    [user]
+    [user, login, logout]
   );
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;

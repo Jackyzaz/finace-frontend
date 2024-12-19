@@ -71,7 +71,7 @@ export default function Transaction(props) {
         creator: props.user.id,
       };
       await axios.put(`${URL_TXACTIONS}/${item.id}`, { data: params });
-      await fetchItems();
+      fetchItems();
     } catch (err) {
       console.log(err);
     } finally {
