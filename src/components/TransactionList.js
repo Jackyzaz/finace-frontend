@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Popconfirm, Space, Table, Tag } from "antd";
+import { Button, Space, Table, Tag } from "antd";
 import { useState } from "react";
 import dayjs from "dayjs";
 import EditTransactionModal from "./EditTransactionModal";
@@ -20,7 +20,7 @@ export default function TransactionList(props) {
 
   const handleModalSave = (updatedValues) => {
     const updatedRecord = { ...editingRecord, ...updatedValues };
-    props.onRowUpdate(updatedRecord); // Call the provided update handler
+    props.onRowUpdate(updatedRecord);
     setIsModalOpen(false);
     setEditingRecord(null);
   };

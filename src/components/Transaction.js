@@ -1,9 +1,9 @@
 import { Divider, Spin } from "antd";
-import AddItem from "./AddItem";
 import TransactionList from "./TransactionList";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import "../App.css";
+import AddTransaction from "./AddTransaction";
 
 export default function Transaction(props) {
   const [isLoading, setIsLoading] = useState(false);
@@ -12,7 +12,6 @@ export default function Transaction(props) {
 
   const URL_TXACTIONS = `/api/txactions`;
   const URL_TXACTIONS_FILTER = `/api/txactions?filters[creator][id][$eq]=${props.user.id}`;
-
   const handleNoteChanged = (id, note) => {
     setTransactionData(
       transactionData.map((transaction) => {
@@ -34,7 +33,7 @@ export default function Transaction(props) {
     }
   };
 
-  const addItem = async (item) => {
+  const addTransaction = async (item) => {
     try {
       setIsLoading(true);
       const params = {
@@ -125,7 +124,7 @@ export default function Transaction(props) {
   return (
     <Spin spinning={isLoading}>
       <h3>จํานวนเงินปัจจุบัน {amount} บาท</h3>
-      <AddItem onItemAdded={addItem} />
+      <AddTransaction onItemAdded={addTransaction} />
       <Divider>บันทึก รายรับ - รายจ่าย</Divider>
       <TransactionList
         data={transactionData}

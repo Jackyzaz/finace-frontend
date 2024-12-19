@@ -1,10 +1,10 @@
-import React from "react";
-import { Modal, Form, Input } from "antd";
+import React, { useEffect } from "react";
+import { Modal, Form, Input, Select } from "antd";
 
 export default function EditTransactionModal({ isVisible, onClose, onSave, initialValues }) {
   const [form] = Form.useForm();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (initialValues) {
       form.setFieldsValue({
         ...initialValues,
@@ -38,8 +38,21 @@ export default function EditTransactionModal({ isVisible, onClose, onSave, initi
         >
           <Input type="datetime-local" />
         </Form.Item>
-        <Form.Item name="type" label="Type" rules={[{ required: true, message: "Please select the type" }]}>
-          <Input />
+        <Form.Item name="type" label="ชนิด" rules={[{ required: true }]}>
+          <Select
+            allowClear
+            style={{ width: "100px" }}
+            options={[
+              {
+                value: "income",
+                label: "รายรับ",
+              },
+              {
+                value: "expense",
+                label: "รายจ่าย",
+              },
+            ]}
+          />
         </Form.Item>
         <Form.Item name="amount" label="Amount" rules={[{ required: true, message: "Please enter the amount" }]}>
           <Input type="number" />

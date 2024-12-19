@@ -1,5 +1,5 @@
 import { Button, Form, Select, Input, InputNumber } from "antd";
-export default function AddItem(props) {
+export default function AddTransaction(props) {
   return (
     <Form layout="inline" onFinish={props.onItemAdded}>
       <Form.Item name="type" label="ชนิด" rules={[{ required: true }]}>
