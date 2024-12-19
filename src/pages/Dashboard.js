@@ -11,7 +11,6 @@ export default function DashboardPage() {
   return (
     <>
       <div className="container">
-        <h1>Dashboard: {user.username}</h1>
         <Transaction user={user} />
       </div>
     </>

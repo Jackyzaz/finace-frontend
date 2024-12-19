@@ -1,15 +1,18 @@
-import { Divider, Spin } from "antd";
+import { Col, Divider, Flex, Row, Spin, Typography } from "antd";
 import TransactionList from "./TransactionList";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import "../App.css";
 import AddTransaction from "./AddTransaction";
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { useAuth } from "../context/useAuth";
 
 export default function Transaction(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
   const [amount, setAmount] = useState(0);
-
+  const { user } = useAuth();
   const URL_TXACTIONS = `/api/txactions`;
   const URL_TXACTIONS_FILTER = `/api/txactions?filters[creator][id][$eq]=${props.user.id}`;
   const handleNoteChanged = (id, note) => {
@@ -120,10 +123,49 @@ export default function Transaction(props) {
       setIsLoading(false);
     }
   }, [transactionData]);
+  ChartJS.register(ArcElement, Tooltip, Legend);
+  const income = transactionData
+    .filter((transaction) => transaction.type === "income")
+    .reduce((sum, transaction) => sum + transaction.amount, 0);
+
+  const expenses = transactionData
+    .filter((transaction) => transaction.type === "expense")
+    .reduce((sum, transaction) => sum + transaction.amount, 0);
+
+  const data = {
+    labels: ["Income", "Expenses"],
+    datasets: [
+      {
+        data: [income, expenses],
+        backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)"],
+        borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
+        borderWidth: 1,
+      },
+    ],
+  };
 
   return (
     <Spin spinning={isLoading}>
-      <h3>จํานวนเงินปัจจุบัน {amount} บาท</h3>
+      <Row
+        justify="space-between"
+        style={{
+          width: "100%",
+          paddingRight: "25vh",
+          marginTop: "5vh",
+        }}
+      >
+        <Col>
+          <h1 style={{ fontSize: "8vh" }}>Dashboard: {props.user.username}</h1>
+          <h2 style={{ fontSize: "4vh" }}>
+            <span>จํานวนเงินปัจจุบัน </span> <a> {amount} </a> <span> บาท </span>
+          </h2>
+        </Col>
+        <Col>
+          <div style={{ width: "40vh" }}>
+            <Pie data={data} />
+          </div>
+        </Col>
+      </Row>
       <AddTransaction onItemAdded={addTransaction} />
       <Divider>บันทึก รายรับ - รายจ่าย</Divider>
       <TransactionList
