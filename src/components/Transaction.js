@@ -134,9 +134,9 @@ export default function Transaction(props) {
     labels: ["Expenses", "Income"],
     datasets: [
       {
-        data: [income, expenses],
-        backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)"],
-        borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
+        data: [expenses, income],
+        backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(75, 192, 192, 0.2)"],
+        borderColor: ["rgba(255, 99, 132, 1)", "rgba(75, 192, 192, 1)"],
         borderWidth: 1,
       },
     ],
