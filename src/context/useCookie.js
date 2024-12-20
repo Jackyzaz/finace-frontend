@@ -11,9 +11,11 @@ export const useCookie = (keyName, defaultValue) => {
     }
   });
 
-  const setValue = (newValue) => {
+  const setValue = (newValue, options, remember) => {
     try {
-      Cookies.set(keyName, JSON.stringify(newValue), { expires: 7 }); // Set cookie with a 7-day expiration
+      if (remember) {
+        Cookies.set(keyName, JSON.stringify(newValue), options);
+      }
     } catch (err) {
       console.error(err);
     }

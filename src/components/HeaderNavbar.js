@@ -6,7 +6,7 @@ import { HomeOutlined, DashboardOutlined, SignalFilled } from "@ant-design/icons
 export default function HeaderNavbar() {
   const items = [
     { key: `/`, label: `Home`, icon: <HomeOutlined /> },
-    { key: `/Dashboard`, label: `Dashboard`, icon: <DashboardOutlined /> },
+    { key: `/dashboard`, label: `Dashboard`, icon: <DashboardOutlined /> },
   ];
   const navigate = useNavigate();
   const { logout, user } = useAuth();

@@ -22,10 +22,19 @@ export const AuthProvider = ({ children }) => {
   const login = useCallback(
     async (formData) => {
       try {
-        const response = await axios.post(URL_AUTH, formData);
+        const response = await axios.post(URL_AUTH, {
+          identifier: formData.identifier,
+          password: formData.password,
+        });
         const { jwt, user: userData } = response.data;
+
         axios.defaults.headers.common = { Authorization: `bearer ${jwt}` };
-        setUser({ ...userData, jwt });
+
+        const cookieOptions = formData.rememberMe
+          ? { path: "/", expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) } // Persistent cookie (30 days)
+          : { path: "/" }; // Session cookie
+
+        setUser({ ...userData, jwt }, cookieOptions, formData.rememberMe);
         navigate("/dashboard", { replace: true });
       } catch (error) {
         console.error("Login failed:", error.message || "An error occurred");

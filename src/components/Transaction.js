@@ -1,4 +1,4 @@
-import { Col, Divider, Flex, Row, Spin, Typography } from "antd";
+import { Col, Divider, Row, Spin } from "antd";
 import TransactionList from "./TransactionList";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
@@ -6,13 +6,11 @@ import "../App.css";
 import AddTransaction from "./AddTransaction";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { useAuth } from "../context/useAuth";
 
 export default function Transaction(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
   const [amount, setAmount] = useState(0);
-  const { user } = useAuth();
   const URL_TXACTIONS = `/api/txactions`;
   const URL_TXACTIONS_FILTER = `/api/txactions?filters[creator][id][$eq]=${props.user.id}`;
   const handleNoteChanged = (id, note) => {
@@ -133,7 +131,7 @@ export default function Transaction(props) {
     .reduce((sum, transaction) => sum + transaction.amount, 0);
 
   const data = {
-    labels: ["Income", "Expenses"],
+    labels: ["Expenses", "Income"],
     datasets: [
       {
         data: [income, expenses],
