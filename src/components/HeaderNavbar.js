@@ -1,19 +1,44 @@
 import { Button, Col, Menu, Row, Space } from "antd";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/useAuth";
-import { HomeOutlined, DashboardOutlined, SignalFilled } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  DashboardOutlined,
+  SignalFilled,
+  UserOutlined,
+  LogoutOutlined,
+  LoginOutlined,
+} from "@ant-design/icons";
 
 export default function HeaderNavbar() {
+  const navigate = useNavigate();
+  const { logout, user } = useAuth();
   const items = [
     { key: `/`, label: `Home`, icon: <HomeOutlined /> },
     { key: `/dashboard`, label: `Dashboard`, icon: <DashboardOutlined /> },
   ];
-  const navigate = useNavigate();
-  const { logout, user } = useAuth();
+
+  const userMenu = [
+    {
+      label: user && user.username,
+      key: "SubMenu",
+      icon: <UserOutlined />,
+      children: [
+        {
+          label: "Logout",
+          key: "logout",
+          icon: <LogoutOutlined />,
+        },
+      ],
+    },
+  ];
+
+  const loginMenu = [{ key: `/login`, label: `Login`, icon: <LoginOutlined /> }];
 
   const handleLogout = () => {
     logout();
   };
+
   const handleLogin = () => {
     navigate("/login", { replace: true });
   };
@@ -46,6 +71,7 @@ export default function HeaderNavbar() {
           style={{
             display: "inline-block",
           }}
+          selectedKeys="None"
           onClick={({ key }) => {
             navigate(key, { replace: true });
           }}
@@ -53,15 +79,30 @@ export default function HeaderNavbar() {
       </Col>
 
       {/* User Section */}
-      <Col>
+      <Col style={{ width: "25vh", display: "flex", justifyContent: "flex-end" }}>
         {user ? (
-          <Button type="primary" onClick={handleLogout}>
-            Logout
-          </Button>
+          <Menu
+            theme="dark"
+            mode="horizontal"
+            items={userMenu}
+            style={{
+              display: "inline-block",
+            }}
+            selectedKeys="None"
+            onClick={handleLogout}
+          />
         ) : (
-          <Button type="primary" onClick={handleLogin}>
-            Login
-          </Button>
+          <Menu
+            theme="dark"
+            mode="horizontal"
+            items={loginMenu}
+            style={{
+              display: "inline-block",
+              minWidth: "100px",
+            }}
+            selectedKeys="None"
+            onClick={handleLogin}
+          />
         )}
       </Col>
     </Row>
