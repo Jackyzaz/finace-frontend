@@ -13,10 +13,7 @@ export const ProtectedRoute = ({ children }) => {
   if (!user) {
     return (
       <>
-        <div className="container">
-          {/* <h1>You Must Login First!</h1>
-          <a href="/login">Go to Login</a> */}
-        </div>
+        <div className="container"></div>
       </>
     );
   }
